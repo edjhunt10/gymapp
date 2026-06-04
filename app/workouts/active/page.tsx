@@ -1,7 +1,7 @@
 "use client";
 
 import { useStore } from "@/lib/store";
-import { Button, Card, Input } from "@/components/ui/primitives";
+import { Button, Card, Input, Modal } from "@/components/ui/primitives";
 import { Plus, X, Check, Trash2, Search, Timer, Save } from "lucide-react";
 import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
@@ -139,39 +139,36 @@ export default function ActiveWorkoutPage() {
       </Button>
 
       {showSaveTpl && (
-        <div className="fixed inset-0 bg-bg/80 backdrop-blur-sm z-30 flex items-end sm:items-center justify-center p-4">
-          <Card className="w-full max-w-md slide-up">
-            <h3 className="font-display font-bold text-xl mb-3">Save as Template</h3>
-            <Input
-              placeholder="Template name"
-              value={tplName}
-              onChange={(e) => setTplName(e.target.value)}
-              autoFocus
-            />
-            <div className="flex gap-2 mt-4">
-              <Button variant="secondary" className="flex-1" onClick={() => setShowSaveTpl(false)}>
-                Cancel
-              </Button>
-              <Button
-                className="flex-1"
-                onClick={() => {
-                  if (!tplName.trim()) return;
-                  saveTemplate({
-                    name: tplName.trim(),
-                    exercises: w.exercises.map((e) => ({
-                      exerciseId: e.exerciseId,
-                      targetSets: e.sets.length,
-                    })),
-                  });
-                  setShowSaveTpl(false);
-                  setTplName("");
-                }}
-              >
-                Save
-              </Button>
-            </div>
-          </Card>
-        </div>
+        <Modal onClose={() => setShowSaveTpl(false)} title="Save as Template">
+          <Input
+            placeholder="Template name"
+            value={tplName}
+            onChange={(e) => setTplName(e.target.value)}
+            autoFocus
+          />
+          <div className="flex gap-2 mt-4">
+            <Button variant="secondary" className="flex-1" onClick={() => setShowSaveTpl(false)}>
+              Cancel
+            </Button>
+            <Button
+              className="flex-1"
+              onClick={() => {
+                if (!tplName.trim()) return;
+                saveTemplate({
+                  name: tplName.trim(),
+                  exercises: w.exercises.map((e) => ({
+                    exerciseId: e.exerciseId,
+                    targetSets: e.sets.length,
+                  })),
+                });
+                setShowSaveTpl(false);
+                setTplName("");
+              }}
+            >
+              Save
+            </Button>
+          </div>
+        </Modal>
       )}
     </div>
   );

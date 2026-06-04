@@ -1,7 +1,7 @@
 "use client";
 
 import { useStore, selectTodayEntries, computeMacrosForEntries } from "@/lib/store";
-import { Button, Card, Input, Label, PageTitle, ProgressBar } from "@/components/ui/primitives";
+import { Button, Card, Input, Label, PageTitle, ProgressBar, Modal } from "@/components/ui/primitives";
 import { Plus, Trash2, X, Search, Settings, Coffee, Soup, UtensilsCrossed, Cookie } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import type { MealType, Food } from "@/lib/types";
@@ -363,20 +363,17 @@ function TargetsModal({
 }) {
   const [t, setT] = useState(targets);
   return (
-    <div className="fixed inset-0 z-30 bg-bg/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-4">
-      <Card className="w-full max-w-md slide-up">
-        <h3 className="font-display font-bold text-xl mb-4">Daily Targets</h3>
-        <div className="space-y-3">
-          <div><Label>Calories</Label><Input type="number" value={t.kcal} onChange={(e) => setT({ ...t, kcal: parseInt(e.target.value) || 0 })} /></div>
-          <div><Label>Protein (g)</Label><Input type="number" value={t.protein} onChange={(e) => setT({ ...t, protein: parseInt(e.target.value) || 0 })} /></div>
-          <div><Label>Carbs (g)</Label><Input type="number" value={t.carbs} onChange={(e) => setT({ ...t, carbs: parseInt(e.target.value) || 0 })} /></div>
-          <div><Label>Fat (g)</Label><Input type="number" value={t.fat} onChange={(e) => setT({ ...t, fat: parseInt(e.target.value) || 0 })} /></div>
-        </div>
-        <div className="grid grid-cols-2 gap-2 mt-5">
-          <Button variant="secondary" onClick={onClose}>Cancel</Button>
-          <Button onClick={() => { onSave(t); onClose(); }}>Save</Button>
-        </div>
-      </Card>
-    </div>
+    <Modal onClose={onClose} title="Daily Targets">
+      <div className="space-y-3">
+        <div><Label>Calories</Label><Input type="number" value={t.kcal} onChange={(e) => setT({ ...t, kcal: parseInt(e.target.value) || 0 })} /></div>
+        <div><Label>Protein (g)</Label><Input type="number" value={t.protein} onChange={(e) => setT({ ...t, protein: parseInt(e.target.value) || 0 })} /></div>
+        <div><Label>Carbs (g)</Label><Input type="number" value={t.carbs} onChange={(e) => setT({ ...t, carbs: parseInt(e.target.value) || 0 })} /></div>
+        <div><Label>Fat (g)</Label><Input type="number" value={t.fat} onChange={(e) => setT({ ...t, fat: parseInt(e.target.value) || 0 })} /></div>
+      </div>
+      <div className="grid grid-cols-2 gap-2 mt-5">
+        <Button variant="secondary" onClick={onClose}>Cancel</Button>
+        <Button onClick={() => { onSave(t); onClose(); }}>Save</Button>
+      </div>
+    </Modal>
   );
 }

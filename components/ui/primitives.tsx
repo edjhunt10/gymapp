@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { forwardRef } from "react";
+import { X } from "lucide-react";
 
 export const Button = forwardRef<
   HTMLButtonElement,
@@ -96,6 +97,46 @@ export function ProgressBar({ value, max, color = "accent" }: { value: number; m
         )}
         style={{ width: `${pct}%` }}
       />
+    </div>
+  );
+}
+
+/**
+ * Mobile-safe modal. The overlay itself scrolls (not the body), so when the
+ * on-screen keyboard opens, the focused input can scroll into view instead of
+ * being trapped behind the keyboard. Anchored near the top rather than the
+ * bottom to keep inputs above the keyboard. Tap backdrop to close.
+ */
+export function Modal({
+  onClose,
+  title,
+  children,
+}: {
+  onClose: () => void;
+  title?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      className="fixed inset-0 z-50 bg-bg/85 backdrop-blur-sm overflow-y-auto overscroll-contain"
+      onClick={onClose}
+    >
+      <div className="min-h-full flex items-start justify-center p-4 pt-[7vh] pb-[40vh]">
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className="w-full max-w-md bg-surface border border-border rounded-lg p-4 slide-up"
+        >
+          {title && (
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-display font-bold text-xl">{title}</h3>
+              <button onClick={onClose} className="text-muted hover:text-text p-1 -mr-1">
+                <X size={18} />
+              </button>
+            </div>
+          )}
+          {children}
+        </div>
+      </div>
     </div>
   );
 }

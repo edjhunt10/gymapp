@@ -1,7 +1,7 @@
 "use client";
 
 import { useStore } from "@/lib/store";
-import { Button, Card, Input, Label, PageTitle } from "@/components/ui/primitives";
+import { Button, Card, Input, Label, PageTitle, Modal } from "@/components/ui/primitives";
 import { Plus, Search, X, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import type { ExerciseCategory, MuscleGroup } from "@/lib/types";
@@ -179,50 +179,44 @@ function NewExerciseModal({
   const [primary, setPrimary] = useState<MuscleGroup>("chest");
 
   return (
-    <div className="fixed inset-0 z-30 bg-bg/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-4">
-      <Card className="w-full max-w-md slide-up">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="font-display font-bold text-xl">New Exercise</h3>
-          <button onClick={onClose} className="text-muted"><X size={18} /></button>
+    <Modal onClose={onClose} title="New Exercise">
+      <div className="space-y-3">
+        <div>
+          <Label>Name</Label>
+          <Input value={name} onChange={(e) => setName(e.target.value)} autoFocus />
         </div>
-        <div className="space-y-3">
-          <div>
-            <Label>Name</Label>
-            <Input value={name} onChange={(e) => setName(e.target.value)} autoFocus />
-          </div>
-          <div>
-            <Label>Category</Label>
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value as ExerciseCategory)}
-              className="w-full h-11 bg-elevated border border-border rounded px-3 outline-none focus:border-accent capitalize mt-1"
-            >
-              {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
-            </select>
-          </div>
-          <div>
-            <Label>Primary muscle</Label>
-            <select
-              value={primary}
-              onChange={(e) => setPrimary(e.target.value as MuscleGroup)}
-              className="w-full h-11 bg-elevated border border-border rounded px-3 outline-none focus:border-accent capitalize mt-1"
-            >
-              {MUSCLES.map((m) => <option key={m} value={m}>{m}</option>)}
-            </select>
-          </div>
-        </div>
-        <div className="grid grid-cols-2 gap-2 mt-5">
-          <Button variant="secondary" onClick={onClose}>Cancel</Button>
-          <Button
-            onClick={() => {
-              if (!name.trim()) return;
-              onSave({ name: name.trim(), category, primary });
-            }}
+        <div>
+          <Label>Category</Label>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value as ExerciseCategory)}
+            className="w-full h-11 bg-elevated border border-border rounded px-3 outline-none focus:border-accent capitalize mt-1"
           >
-            Save
-          </Button>
+            {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+          </select>
         </div>
-      </Card>
-    </div>
+        <div>
+          <Label>Primary muscle</Label>
+          <select
+            value={primary}
+            onChange={(e) => setPrimary(e.target.value as MuscleGroup)}
+            className="w-full h-11 bg-elevated border border-border rounded px-3 outline-none focus:border-accent capitalize mt-1"
+          >
+            {MUSCLES.map((m) => <option key={m} value={m}>{m}</option>)}
+          </select>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-2 mt-5">
+        <Button variant="secondary" onClick={onClose}>Cancel</Button>
+        <Button
+          onClick={() => {
+            if (!name.trim()) return;
+            onSave({ name: name.trim(), category, primary });
+          }}
+        >
+          Save
+        </Button>
+      </div>
+    </Modal>
   );
 }
